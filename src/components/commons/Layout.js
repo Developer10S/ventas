@@ -1,23 +1,24 @@
-import React from 'react';
-import Hearder from './Hearder';
-import Menu from './Menu';
+import React from "react";
+import { ModalContextProvider } from "../../contexts/modalContenx";
+import Hearder from "./Hearder";
+import Menu from "./Menu";
 
-const Layout = () => {
+const Layout = (props) => {
   return (
-    <div>     
-        <Hearder/>   
+    <ModalContextProvider>
+      <div>
+        <Hearder />
         <div className="container">
-            <div className="columns">
-                <div className="column is-one-quarter">
-                    <Menu/>
-                </div>
-                <div className="column">
-
-                </div>
+          <div className="columns">
+            <div className="column is-one-quarter">
+              <Menu />
             </div>
+            <div className="column">{props.children}</div>
+          </div>
         </div>
-    </div>
+      </div>
+    </ModalContextProvider>
   );
-}
+};
 
-export default Layout
+export default Layout;
