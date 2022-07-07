@@ -1,35 +1,34 @@
-import React, { useContext } from "react";
-import { ClienteContext } from "../../contexts/clienteContext";
-import { ModalContext } from "../../contexts/modalContenx";
+import React, { useContext } from 'react'
+import { ClienteContext } from '../../contexts/clienteContext';
+import { ModalContext } from '../../contexts/modalContenx';
 
 const RowCliente = ({cliente}) => {
 
-  const {setModalTitle,setShowModal}= useContext(ModalContext);
-  const {obtenerCliente, eliminarCliente}=useContext(ClienteContext);
+  const { setModalTitle, setShowModal } = useContext(ModalContext);
+  const { obtenerCliente, eliminarCliente } = useContext(ClienteContext);
 
-    const modifcarCliente=()=>{
-      obtenerCliente(cliente);
-      setModalTitle("Editar Cliente");
-      setShowModal(true);
-    }
+  const abrirModalModificarCliente = () => {
+    obtenerCliente(cliente);
+    setModalTitle('Modificar cliente');
+    setShowModal(true);
+  }
 
-    
   return (
     <tr>
       <td>
-        <button 
-        className="button is-small is-info mr-1" 
-        title="Modificar"
-        onClick={()=>modifcarCliente()}
+        <button
+          className="button is-small is-info mr-1"
+          title="Modificar"
+          onClick={ () => abrirModalModificarCliente() }
         >
           <span className="icon is-small">
             <i className="fas fa-edit"></i>
           </span>
         </button>
-        <button 
-        className="button is-small is-danger" 
-        title="Eliminar"
-        onClick={()=>eliminarCliente(cliente.idCliente)}
+        <button
+          className="button is-small is-danger"
+          title="Eliminar"
+          onClick={ () => eliminarCliente(cliente.idPersona) }
         >
           <span className="icon is-small">
             <i className="fas fa-trash-alt"></i>
@@ -43,6 +42,6 @@ const RowCliente = ({cliente}) => {
       <td>{cliente.email}</td>
     </tr>
   );
-};
-
+}
+ 
 export default RowCliente;

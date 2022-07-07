@@ -1,88 +1,88 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ClienteContext } from "../../contexts/clienteContext";
-import { ModalContext } from "../../contexts/modalContenx";
+import React, { useContext, useEffect, useState } from 'react';
+import { ClienteContext } from '../../contexts/clienteContext';
+import { ModalContext } from '../../contexts/modalContenx';
 
 const FormCliente = () => {
-  const { setShowModal } = useContext(ModalContext);
-  const {registrarCliente, clienteActual, obtenerCliente, actualizarCliente} =useContext(ClienteContext);
 
+  const { setShowModal } = useContext(ModalContext);
+
+  const { registrarCliente, actualizarCliente, clienteActual, obtenerCliente } = useContext(ClienteContext);
 
   const clienteDefault = {
-    nombres: "",
-    apellidos: "",
-    direccion: "",
-    telefono: "",
-    email: "",
-  };
-  const [cliente, setCliente] = useState(clienteDefault);
-  const [mensaje, setMensaje] = useState(null);
-
-  useEffect(()=>{
-    if (clienteActual!==null){
-      setCliente({
-        ...clienteActual,
-        direccion:clienteActual.direccion!==null? clienteActual.direccion:'',
-        telefono:clienteActual.telefono!==null? clienteActual.telefono:'',
-      })
-    }else{
-      setCliente(clienteDefault);
-    }
-  }, [clienteActual]);
-
-  const handleChange = (e) => {
-    setCliente({
-      ...cliente,
-      [e.target.name]: e.target.value,
-    });
-  };
-
- 
-
-  //funcion para retornar el objeto solo con los valores ingresados
-  const obtenerClienteEnviar=()=>{
-    let clineteTemp={...cliente};
-    if(clineteTemp.direccion==='') delete clineteTemp.direccion;    
-    if(clineteTemp.telefono==='') delete clineteTemp.telefono;
-    return clineteTemp;
+    nombres: '',
+    apellidos: '',
+    direccion: '',
+    telefono: '',
+    email: ''
   }
 
-  const handleOnSubmit = (e) => {
+  const [persona, setCliente] = useState(clienteDefault);
+  const [mensaje, setMensaje] = useState(null);
+
+  useEffect( () => {
+
+    if(clienteActual !== null) {
+      setCliente({
+        ...clienteActual,
+        direccion: clienteActual.direccion ? clienteActual.direccion : '',
+        telefono: clienteActual.telefono ? clienteActual.telefono : '',
+      });
+    } else {
+      setCliente(clienteDefault);
+    }
+    // eslint-disable-next-line
+  }, [clienteActual]);
+
+  const handleChange = e => {
+    setCliente({
+      ...persona,
+      [e.target.name] : e.target.value
+    })
+  }
+
+  const handleOnSubmit = e => {
     e.preventDefault();
 
-    //validaciones
-    if (
-      cliente.nombres.trim() === "" ||
-      cliente.apellidos.trim() === "" ||
-      cliente.email.trim() === ""
-    ) {
-      setMensaje("Los nombres, apellidos y email son requeridos");
+    //validar
+    if (persona.nombres.trim() === '' && persona.apellidos.trim() === '' && persona.email.trim() ) {
+      setMensaje('Los nombres y apellidos son obligatorios.');
       return;
     }
-    //obtener el objeto a enviar
-    if(clienteActual!==null){      
-      actualizarCliente(obtenerClienteEnviar());
-    }else{
-      registrarCliente(obtenerClienteEnviar());
+    
+    //obtener objeto a enviar
+    if(clienteActual !== null) {
+      actualizarCliente(obtenerClienteAEnviar());
+    } else {
+      registrarCliente(obtenerClienteAEnviar());
     }
-  
-    //limpiar y cerra el modal
-   
-    cerrarModal();    
-  };
+
+    //cerrar y limpiar el modal
+    cerrarModal();
+  }
+
+  const limpiarForm = () => {
+    setMensaje(null);
+    setCliente(clienteDefault);
+  }
 
   const cerrarModal = () => {
     limpiarForm();
     setShowModal(false);
     obtenerCliente(null);
-  };
+  }
 
-  const limpiarForm=()=>{
-    setMensaje(null);
-    setCliente(clienteDefault);
-  } 
+  const obtenerClienteAEnviar = () => {
+    let clienteTemp = {...persona};
+    if(clienteTemp.direccion === "") delete clienteTemp.direccion;
+    if(clienteTemp.telefono === "") delete clienteTemp.telefono;
+    return clienteTemp;
+  }
+
   return (
     <form onSubmit={handleOnSubmit}>
-        {mensaje ? <div className="notification is-danger">{mensaje}</div>:null}
+
+      { mensaje ? <div className="notification is-danger">{mensaje}</div> : null }
+
       <div className="field is-horizontal">
         <div className="field-label is-normal">
           <label className="label">Nombre Completo</label>
@@ -96,7 +96,7 @@ const FormCliente = () => {
                 type="text"
                 placeholder="Nombre"
                 name="nombres"
-                value={cliente.nombres}
+                value={persona.nombres}
                 onChange={handleChange}
               />
               <span className="icon is-small is-left">
@@ -112,7 +112,7 @@ const FormCliente = () => {
                 type="text"
                 placeholder="Apellidos"
                 name="apellidos"
-                value={cliente.apellidos}
+                value={persona.apellidos}
                 onChange={handleChange}
               />
             </p>
@@ -133,7 +133,7 @@ const FormCliente = () => {
                 type="text"
                 placeholder="Ingrese su direccion"
                 name="direccion"
-                value={cliente.direccion}
+                value={persona.direccion}
                 onChange={handleChange}
               />
               <span className="icon is-small is-left">
@@ -157,7 +157,7 @@ const FormCliente = () => {
                 type="text"
                 placeholder="Telefono"
                 name="telefono"
-                value={cliente.telefono}
+                value={persona.telefono}
                 onChange={handleChange}
               />
               <span className="icon is-small is-left">
@@ -167,7 +167,7 @@ const FormCliente = () => {
           </div>
         </div>
       </div>
-
+      
       <div className="field is-horizontal">
         <div className="field-label is-normal">
           <label className="label">Email</label>
@@ -181,7 +181,7 @@ const FormCliente = () => {
                 type="email"
                 placeholder="Ingrese su Email"
                 name="email"
-                value={cliente.email}
+                value={persona.email}
                 onChange={handleChange}
               />
               <span className="icon is-small is-left">
@@ -193,26 +193,23 @@ const FormCliente = () => {
       </div>
 
       <div className="field is-horizontal">
-        <div className="field-label"></div>
+        <div className="field-label">
+        </div>
         <div className="field-body">
           <div className="field">
             <div className="control">
-              <button type="submit" className="button is-primary mr-1">
-                Guardar
-              </button>
+              <button type="submit" className="button is-primary mr-1">Guardar</button>
               <button
                 type="button"
                 className="button"
-                onClick={() => cerrarModal()}
-              >
-                Cancelar
-              </button>
+                onClick={ () => cerrarModal() }
+              >Cancelar</button>
             </div>
           </div>
         </div>
       </div>
     </form>
   );
-};
-
+}
+ 
 export default FormCliente;

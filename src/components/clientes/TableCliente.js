@@ -1,21 +1,17 @@
-import React, { useContext, useEffect } from "react";
-import { ClienteContext } from "../../contexts/clienteContext";
-import RowCliente from "./RowCliente";
+import React, { useContext, useEffect } from 'react';
+import RowCliente from './RowCliente';
+import { ClienteContext } from '../../contexts/clienteContext';
 
 const TableCliente = () => {
- 
-  const {clientesList, obtenerClientes} = useContext(ClienteContext);
-  
-  //jquey, funcion que recibe una funcion
+
+  const { clientesList, obtenerClientes } = useContext(ClienteContext);
 
   useEffect(() => {
     obtenerClientes();
     // eslint-disable-next-line
   }, []);
 
- // const arr = clientesList || [];
-//  if( arr === 0) return <p>No existen clientes. </p>
-//if (clientesList.length === 0) return <center><p>No existen clientes.</p></center>
+  if (clientesList.length === 0) return <center><p>No existen clientes.</p></center>
 
   return (
     <div className="table-container">
@@ -31,10 +27,10 @@ const TableCliente = () => {
           </tr>
         </thead>
         <tbody>
-          { clientesList && clientesList.length ?
-           clientesList.map(cliente => (
-              <RowCliente cliente={cliente} key={cliente.idCliente} />
-            )):null
+          {
+            clientesList.map(cliente => (
+              <RowCliente cliente={cliente} key={cliente.idPersona} />
+            ))
           }
         </tbody>
       </table>
